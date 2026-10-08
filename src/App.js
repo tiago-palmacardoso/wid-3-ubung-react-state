@@ -5,7 +5,10 @@ import { Aufgabe1, Aufgabe2, Aufgabe3, Aufgabe4 } from "./static/ExText";
 function App() {
   const [state, setState] = useState("defaultWert"); // Beispiel für einen "useState-Hook".
   const [counter, setCounter] = useState(0); // useState Hook für Aufgabe 1
-
+  const [isChecked, setCheckbox] = useState(true); // useState fur Aufgabe 2
+  const [text, setText] = useState(""); // useState base fur Aufgabe 3
+  const [align, setAlign] = useState("center"); // useState fur Aufgabe 4
+  const [font, setFont] = useState(12) // useState fur font in Aufgabe 4
   // Du benötigst für jede Aufgabe einen weiteren "useState-Hook", welchen du am besten hier platzierst. Achte darauf, einen passenden Datentype als "default Wert" anzugeben.
 
   return (
@@ -30,6 +33,12 @@ function App() {
            * Unter diesem Kommentar fügst du zwei weitere Buttons hinzu.
            * Setze das Attribut className="Button" um das vordefinierte Styling für einen Button zu übernehmen.
            */}
+          <button className="Button" onClick={() => setCounter(counter + 5)}>
+            +5
+          </button>
+          <button className="Button" onClick={() => setCounter(0)}>
+            Reset
+          </button>
         </div>
       </div>
 
@@ -43,13 +52,12 @@ function App() {
           <input
             id="Checkbox"
             type="checkbox"
+            checked={isChecked}
             onChange={
-              (e) =>
-                console.log(
-                  e.target.checked,
-                ) /* Hier brauchst du wieder eine setState Funktion. Sie kann e.target.checked als Argument bekommen und dies in State schreiben. */
-            }
+              (e) => setCheckbox(e.target.checked)}
+          /* Hier brauchst du wieder eine setState Funktion. Sie kann e.target.checked als Argument bekommen und dies in State schreiben. */
           />
+
           <div>
             {/*
              * Im P-Element brauchst du zweimal einen Ternary-Operator (Erinnerung: Bedingung ? Wenn true : Wenn false).
@@ -57,8 +65,9 @@ function App() {
              * Schreibe das Element dann so um, dass bei true die eine Farbe, und bei false die andere Farbe benutzt wird.
              * Gleiches machst du für den Text.
              */}
-            <p style={{ color: "#007cc3" /*  oder "#ff00ff" */ }}>
-              {"JA" /*  oder "NEIN" */}
+
+            <p style={{ color: isChecked ? "#007cc3" : "#ff00ff" }}>
+              {isChecked ? "JA" : "NEIN"}
             </p>
           </div>
         </div>
@@ -74,15 +83,15 @@ function App() {
           <input
             id="textfeld"
             type="text"
+            value={text}
             onChange={
               (e) =>
-                console.log(
-                  e.target.value,
+                setText(e.target.value
                 ) /* Hier brauchst du wieder eine setState Funktion. Sie soll e.target.value als Argument bekommen und dies in State schreiben. */
             }
           />
           <div>
-            <p>{/*  Hier liest du die State Variable aus.  */}</p>
+            <p>{text}</p>
           </div>
         </div>
       </div>
@@ -100,18 +109,22 @@ function App() {
            */}
           <select
             className="Dropdown"
-            onChange={(event) => {
-              console.log(
-                "event.target.value ist: ",
-                event.target.value,
-                " der Datentype ist: ",
-                typeof event.target.value,
-              );
-            }}
+            value={align}
+            onChange={(e) => setAlign(e.target.value)}
           >
+
             <option value="left">Links</option>
             <option value="center">Mittig</option>
             <option value="right">Rechts</option>
+          </select>
+          <select
+            className="Dropdown"
+            value={font}
+            onChange={(e) => setFont(parseInt(e.target.value))}>
+            <option value={10}>10</option>
+            <option value={12}>12</option>
+            <option value={14}>14</option>
+            <option value={16}>16</option>
           </select>
           {/*
            * Hier implementierst du ein zweites Dropdown, welches die Schriftgrösse ändern soll. Gib Werte (value) für 10, 12, 14, 16 vor.
@@ -124,8 +137,8 @@ function App() {
               id="DynamicText"
               style={
                 {
-                  textAlign: "center",
-                  fontSize: 10,
+                  textAlign: align,
+                  fontSize: font,
                 } /* Diese statischen Werte möchtest du an "State" binden. Überprüfe ob deine Interaktionen den Text verändert  */
               }
             >
